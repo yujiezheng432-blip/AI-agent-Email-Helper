@@ -1,18 +1,16 @@
-# main.py
-
-from tools.read_email_tool import read_recent_emails
+from services.mail163_service import read_163_emails
+from database.db import init_db
+from database.email_repository import save_raw_email
 
 
 def main():
-    emails = read_recent_emails(limit=5)
+    init_db()
 
-    for email in emails:
-        print("邮件ID:", email["message_id"])
-        print("发件人:", email["sender_name"], email["sender_email"])
-        print("标题:", email["subject"])
-        print("时间:", email["received_time"])
-        print("预览:", email["body_preview"])
-        print("-" * 80)
+    emails = read_163_emails(limit=5)
+
+    for email_data in emails:
+        save_raw_email(email_data)
+        print("已保存邮件:", email_data["subject"])
 
 
 if __name__ == "__main__":
