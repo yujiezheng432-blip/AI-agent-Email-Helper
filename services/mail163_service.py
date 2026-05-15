@@ -2,11 +2,10 @@ import imaplib
 import email
 from email.header import decode_header
 
+from config.settings import get_mail163_credentials
+
 # 允许 imaplib 使用 ID 命令
 imaplib.Commands["ID"] = ("AUTH", "SELECTED")
-
-EMAIL_ACCOUNT = "zyjBuptSign@163.com"
-AUTH_CODE = "GFeMkbTnZ5mKqLbr"
 
 IMAP_SERVER = "imap.163.com"
 
@@ -54,8 +53,15 @@ def send_imap_id(mail):
 
 def read_163_emails(limit=5):
     """
-    读取 163 邮箱最近邮件
+    读取 163 邮箱最近邮件。
+    需在环境变量或 .env 中配置 MAIL163_ACCOUNT、MAIL163_AUTH_CODE。
     """
+
+    email_account, auth_code = get_mail163_credentials()
+    if not email_account or not auth_code:
+        raise RuntimeError(
+            "未配置 163 邮箱：请设置环境变量 MAIL163_ACCOUNT 与 MAIL163_AUTH_CODE（或写入 .env）"
+        )
 
     print("=" * 60)
     print("📨 开始读取 163 邮箱邮件")
@@ -69,7 +75,7 @@ def read_163_emails(limit=5):
         print("✅ IMAP 服务器连接成功")
 
         print("🔐 正在登录邮箱...")
-        mail.login(EMAIL_ACCOUNT, AUTH_CODE)
+        mail.login(email_account, auth_code)
         print("✅ 邮箱登录成功")
 
         send_imap_id(mail)

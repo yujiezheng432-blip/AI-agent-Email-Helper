@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.env
+*.db
+data/
+
+# IDE
+.idea/
+
+# 本地敏感文件（勿提交）
+网易邮箱授权码.txt
+授权码--网易.png

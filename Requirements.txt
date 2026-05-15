@@ -2,3 +2,4 @@ msal
 requests
 python-dotenv
 beautifulsoup4
+ollama
